@@ -1,196 +1,142 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { Button, Input } from "@heroui/react";
+import { FaGithub } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaLinkedin } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
+
+// ----------------------------------------------------------------------
+// SUB-COMPONENTS
+// ----------------------------------------------------------------------
+
+const FooterHeading = ({ children }) => (
+  <h4 className="text-white font-semibold mb-6 tracking-tight">{children}</h4>
+);
+
+const FooterLink = ({ href, children }) => (
+  <li>
+    <Link href={href} className="text-zinc-400 hover:text-blue-400 transition-colors text-sm">
+      {children}
+    </Link>
+  </li>
+);
+
+// ----------------------------------------------------------------------
+// MAIN FOOTER COMPONENT
+// ----------------------------------------------------------------------
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 bg-[#05060A]">
-      {/* Background Glow */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute left-1/2 top-0 h-[500px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-b from-blue-900/20 to-transparent blur-3xl" />
-      </div>
+    <footer className="relative bg-[#030303] border-t border-white/5 pt-20 pb-8 overflow-hidden font-sans">
+      
+      {/* Subtle Background Glow for the Footer */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-[150px] bg-blue-600/10 blur-[80px] rounded-full pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-16">
-        <div className="grid gap-12 lg:grid-cols-12">
-          {/* Left Section */}
-          <div className="lg:col-span-5">
-            <Link href="/">
-              {/* <Image
-                src="/logo.png"
-                alt="Hireloop"
-                width={180}
-                height={50}
-                className="h-11 w-auto"
-              /> */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* ✉️ NEWSLETTER BANNER (Integrated elegantly at the top) */}
+        <div className="w-full bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-8 md:p-10 mb-16 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-2">Stay updated</h3>
+            <p className="text-zinc-400">Get the latest prompts, platform features, and creator updates.</p>
+          </div>
+          <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
+            <Input 
+              type="email" 
+              placeholder="Enter your email" 
+              classNames={{
+                inputWrapper: "bg-white/5 border-white/10 hover:bg-white/10 focus-within:!bg-white/10 focus-within:border-blue-500",
+                input: "text-white placeholder:text-zinc-500",
+              }}
+              className="w-full sm:w-72"
+            />
+            <Button className="bg-white text-black font-semibold hover:bg-zinc-200 transition-colors px-8 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              Subscribe
+            </Button>
+          </div>
+        </div>
+
+        {/* 🗺️ MULTI-COLUMN NAVIGATION */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
+          
+          {/* Column 1: Brand & Socials (Spans 2 columns on large screens for better balance) */}
+          <div className="col-span-2 md:col-span-4 lg:col-span-2 flex flex-col items-start pr-4">
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <span className="font-display font-bold text-xl text-white tracking-tight">NeuPrompt</span>
             </Link>
-
-            <p className="mt-6 max-w-sm text-sm leading-7 text-zinc-400">
-              The AI-native career platform. Built for people who
-              take their work seriously.
+            
+            <p className="text-zinc-400 text-sm leading-relaxed mb-8 max-w-xs">
+              Discover, share, and monetize production-ready AI prompts. The ultimate ecosystem for AI creators.
             </p>
 
-            {/* Social Icons */}
-            <div className="mt-10 flex items-center gap-3">
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-white/5 text-zinc-300 transition hover:bg-white/10 hover:text-white"
-              >
-                f
-              </Link>
-
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-indigo-600 text-white transition hover:bg-indigo-500"
-              >
-                p
-              </Link>
-
-              <Link
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-md bg-white/5 text-zinc-300 transition hover:bg-white/10 hover:text-white"
-              >
-                in
-              </Link>
+            <div className="flex items-center gap-4">
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105">
+                <FaGithub size={20} />
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105">
+                <FaXTwitter size={18} />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105">
+                <FaLinkedin size={20} />
+              </a>
+              <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:bg-white/10 hover:text-white transition-all hover:scale-105">
+                <FaDiscord size={20} />
+              </a>
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="lg:col-span-7">
-            <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
-              {/* Product */}
-              <div>
-                <h3 className="mb-5 text-sm font-semibold text-indigo-400">
-                  Product
-                </h3>
-
-                <ul className="space-y-4">
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Job Discovery
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Worker AI
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Companies
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Salary Data
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Navigation */}
-              <div>
-                <h3 className="mb-5 text-sm font-semibold text-indigo-400">
-                  Navigations
-                </h3>
-
-                <ul className="space-y-4">
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Help Center
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Career Library
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Contact
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Resources */}
-              <div>
-                <h3 className="mb-5 text-sm font-semibold text-indigo-400">
-                  Resources
-                </h3>
-
-                <ul className="space-y-4">
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Brand Guideline
-                    </Link>
-                  </li>
-
-                  <li>
-                    <Link
-                      href="#"
-                      className="text-sm text-zinc-400 hover:text-white"
-                    >
-                      Newsroom
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
+          {/* Column 2: Navigation */}
+          <div>
+            <FooterHeading>Platform</FooterHeading>
+            <ul className="flex flex-col gap-3">
+              <FooterLink href="/">Home</FooterLink>
+              <FooterLink href="/prompts">All Prompts</FooterLink>
+              <FooterLink href="/categories">Categories</FooterLink>
+              <FooterLink href="/pricing">Pricing</FooterLink>
+            </ul>
           </div>
+
+          {/* Column 3: Company */}
+          <div>
+            <FooterHeading>Company</FooterHeading>
+            <ul className="flex flex-col gap-3">
+              <FooterLink href="/about">About Us</FooterLink>
+              <FooterLink href="/contact">Contact</FooterLink>
+              <FooterLink href="/blog">Blog</FooterLink>
+              <FooterLink href="/faq">FAQ</FooterLink>
+            </ul>
+          </div>
+
+          {/* Column 4: Legal */}
+          <div>
+            <FooterHeading>Legal</FooterHeading>
+            <ul className="flex flex-col gap-3">
+              <FooterLink href="/terms">Terms of Service</FooterLink>
+              <FooterLink href="/privacy">Privacy Policy</FooterLink>
+              <FooterLink href="/cookies">Cookie Policy</FooterLink>
+            </ul>
+          </div>
+
         </div>
 
-        {/* Bottom */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-center md:flex-row">
-          <p className="text-sm text-zinc-500">
-            Copyright 2026 — Hire Loop
+        {/* ⚖️ BOTTOM SECTION */}
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-zinc-500 text-sm">
+            © {new Date().getFullYear()} NeuPrompt. All rights reserved.
           </p>
-
-          <div className="flex items-center gap-6">
-            <Link
-              href="#"
-              className="text-sm text-zinc-500 hover:text-white"
-            >
-              Terms & Policy
-            </Link>
-
-            <Link
-              href="#"
-              className="text-sm text-zinc-500 hover:text-white"
-            >
-              Privacy Guideline
-            </Link>
-          </div>
+          <p className="text-zinc-500 text-sm flex items-center gap-1">
+            Made with <span className="text-rose-500 animate-pulse">❤️</span> for AI Creators.
+          </p>
         </div>
+
       </div>
     </footer>
   );
