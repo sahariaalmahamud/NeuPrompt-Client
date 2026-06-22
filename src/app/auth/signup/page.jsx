@@ -13,7 +13,7 @@ function SignupContent() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("seeker");
+    const [role, setRole] = useState("user");
     // UI States
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +34,7 @@ function SignupContent() {
         setSuccess("");
         setIsLoading(true);
 
-        const plan = role === "seeker" ? "seeker_free" : "recruiter_free"
+        // const plan = role === "user" ? "user_free" : "creator_free"
 
         try {
             const { data, error: authError } = await signUp.email({
@@ -42,7 +42,7 @@ function SignupContent() {
                 password,
                 name,
                 role,
-                plan
+                // plan
             });
 
             // redirect on successful signup
@@ -144,32 +144,26 @@ function SignupContent() {
                         </div>
                     )}
 
+                    {/* Role Selection */}
+
 
                     <div className="flex flex-col gap-4">
                         <Label>What type of account do you want to create?</Label>
-                        <RadioGroup defaultValue="seeker" name="plan-orientation" orientation="horizontal" value={role} onChange={setRole}>
-                            <Radio value="seeker">
+                        <RadioGroup defaultValue="user" name="role" orientation="horizontal"  onChange={value =>setRole(value)}>
+                            <Radio value="user">
                                 <Radio.Control>
                                     <Radio.Indicator />
                                 </Radio.Control>
                                 <Radio.Content>
-                                    <Label>Seeker</Label>
+                                    <Label>user</Label>
                                 </Radio.Content>
                             </Radio>
-                            <Radio value="recruiter">
+                            <Radio value="creator">
                                 <Radio.Control>
                                     <Radio.Indicator />
                                 </Radio.Control>
                                 <Radio.Content>
-                                    <Label>Recruiter</Label>                   
-                                </Radio.Content>
-                            </Radio>
-                            <Radio value="admin">
-                                <Radio.Control>
-                                    <Radio.Indicator />
-                                </Radio.Control>
-                                <Radio.Content>
-                                    <Label>Admin</Label>                   
+                                    <Label>creator</Label>                   
                                 </Radio.Content>
                             </Radio>
                         </RadioGroup>

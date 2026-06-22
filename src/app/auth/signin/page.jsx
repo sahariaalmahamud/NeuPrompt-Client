@@ -52,7 +52,7 @@ function SigninContent() {
             <Card className="w-full max-w-md sm:max-w-lg lg:max-w-xl p-6 sm:p-8 lg:p-10 shadow-sm border border-zinc-200 dark:border-zinc-800">
 
                 <div className="flex flex-col items-center justify-center gap-1 pb-6 border-b border-zinc-100 dark:border-zinc-800 mb-6 text-center">
-                    <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Sign in to Hireloop</h1>
+                    <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">Sign in to NeuPrompt</h1>
                     <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">Welcome back — enter your details to continue</p>
                 </div>
 
