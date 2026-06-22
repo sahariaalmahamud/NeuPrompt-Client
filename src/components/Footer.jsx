@@ -44,15 +44,13 @@ export default function Footer() {
             <p className="text-zinc-400">Get the latest prompts, platform features, and creator updates.</p>
           </div>
           <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3">
-            <Input 
-              type="email" 
-              placeholder="Enter your email" 
-              classNames={{
-                inputWrapper: "bg-white/5 border-white/10 hover:bg-white/10 focus-within:!bg-white/10 focus-within:border-blue-500",
-                input: "text-white placeholder:text-zinc-500",
-              }}
-              className="w-full sm:w-72"
-            />
+            <div className="w-full sm:w-72 bg-white/5 border-white/10 hover:bg-white/10 focus-within:!bg-white/10 focus-within:border-blue-500 rounded-md">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full text-white placeholder:text-zinc-500 bg-transparent"
+              />
+            </div>
             <Button className="bg-white text-black font-semibold hover:bg-zinc-200 transition-colors px-8 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
               Subscribe
             </Button>
