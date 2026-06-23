@@ -28,14 +28,8 @@ export default function RootLayout({ children }) {
       data-theme="dark"
       className={`${spaceGrotesk.variable} ${inter.variable} dark antialiased h-full`}
     >
-      <body className="min-h-full bg-[#030303] flex flex-col">
-
-        {/* Global Component Content Tree */}
-        <Navbar />
-        <main>
+      <body className="min-h-full bg-[#030303]">
           {children}
-        </main>
-        <Footer />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 
 
-const AdminPage = () => {
+const AdminAnalyticsPage = () => {
     return (
         <div>
             this is the admin page. You can add your content here.
@@ -8,4 +8,4 @@ const AdminPage = () => {
     );
 };
 
-export default AdminPage;
+export default AdminAnalyticsPage;
