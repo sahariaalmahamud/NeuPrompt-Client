@@ -1,8 +1,9 @@
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 
+
 export default function DashboardLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-[#030303]">
+    <div className="flex min-h-screen">
       {/* Sidebar — renders its own responsive variants internally */}
       <DashboardSidebar />
 
@@ -15,10 +16,8 @@ export default function DashboardLayout({ children }) {
       */}
       <main className="
         flex-1 min-w-0
-        pt-16 pb-16 px-4
-        md:pt-0 md:pb-0 md:px-0
-        md:ml-[64px]
-        lg:ml-[260px]
+        pt-16 pb-16 
+        md:pt-4 md:pb-0 md:px-0
       ">
         <div className="h-full w-full">
           {children}

@@ -8,4 +8,4 @@ const CreatorPromptsPage = () => {
     );
 };
 
-export default CreatorPromptPage;
+export default CreatorPromptsPage;

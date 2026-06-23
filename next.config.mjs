@@ -15,10 +15,11 @@ const nextConfig = {
     },
     ],
   },
-
-  // serverExternalPackages: [
-  //   "@better-auth/kysely-adapter",
-  // ],
 };
 
 export default nextConfig;
+
+
+// serverExternalPackages: [
+//     "@better-auth/kysely-adapter",
+//   ],

@@ -1,52 +1,25 @@
-
-"use client";
-
-// import StatsSection from "@/components/dashboard/StatsSection";
-import { useSession } from "@/lib/auth-client";
-
-// import {
-//     LayoutList,
-//     Persons,
-//     Rocket,
-//     CircleCheck,
-// } from "@gravity-ui/icons";
-
-const CreatorDashboardHomePage = () => {
-
-    const {data: session, isPending} = useSession();
-
-    const user = session?.user;
-
-    // const stats = [
-    //     {
-    //         title: "Total Job Posts",
-    //         value: 48,
-    //         icon: LayoutList,
-    //     },
-    //     {
-    //         title: "Total Applicants",
-    //         value: "1,284",
-    //         icon: Persons,
-    //     },
-    //     {
-    //         title: "Active Jobs",
-    //         value: 18,
-    //         icon: Rocket,
-    //     },
-    //     {
-    //         title: "Jobs Closed",
-    //         value: 32,
-    //         icon: CircleCheck,
-    //     },
-    // ];
+import CreatorStats from "@/components/dashboard/creator/CreatorStats";
+import { getUserSession } from "@/lib/core/session";
 
 
-return (
-    <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Welcome, {isPending ? "..." : user?.name}!</h2>
-        {/* <StatsSection stats={stats} /> */}
+export default async function CreatorDashboardHomePage() {
+  // Fetch user session securely on the server
+  const user = await getUserSession();
+
+  return (
+    <div className="max-w-[90%] mx-auto w-full">
+      {/* 🚀 HEADER SECTION (Server Rendered) */}
+      <div className="mb-8 flex flex-col gap-1">
+        <h2 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight">
+          Welcome back, {user?.name || "Creator"}!
+        </h2>
+        <p className="text-sm text-zinc-400">
+          Here is an overview of your prompt performance and ecosystem impact.
+        </p>
+      </div>
+
+      {/* 📊 STATS GRID (Client Component) */}
+      <CreatorStats />
     </div>
-);
-};
-
-export default CreatorDashboardHomePage;
+  );
+}

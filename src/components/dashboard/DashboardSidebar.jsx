@@ -89,7 +89,7 @@ export default function DashboardSidebar() {
           <Avatar
             src={user?.image}
             name={user?.name?.charAt(0) || "U"}
-            className="ring-2 ring-white/10 ring-offset-1 ring-offset-[#0d0d10]"
+            // className="ring-2 ring-white/10 ring-offset-1 ring-offset-[#0d0d10]"
             size="sm"
           />
         </div>
@@ -99,7 +99,7 @@ export default function DashboardSidebar() {
           <Avatar
             src={user?.image}
             name={user?.name?.charAt(0) || "U"}
-            className="ring-2 ring-white/10 ring-offset-2 ring-offset-[#0d0d10] shrink-0"
+            // className="ring-2 ring-white/10 ring-offset-2 ring-offset-[#0d0d10] shrink-0"
             size="sm"
           />
           <div className="flex flex-col overflow-hidden min-w-0">

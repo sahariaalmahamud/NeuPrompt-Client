@@ -197,15 +197,14 @@ export default function Navbar() {
                 <Link href="/auth/signin" className="text-sm font-medium text-zinc-400 hover:text-white transition-colors px-3">
                   Sign In
                 </Link>
-                <Button
-                  as={Link}
+                <Link
                   href="/auth/signup"
-                  className="bg-blue-600 text-white font-semibold tracking-wide hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.2)]"
+                  className="bg-blue-600 text-white font-semibold tracking-wide hover:bg-blue-500 p-2 rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.2)]"
                   size="sm"
                   radius="full"
                 >
                   Sign Up
-                </Button>
+                </Link>
               </>
             )}
           </div>
