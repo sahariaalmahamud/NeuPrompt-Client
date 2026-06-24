@@ -117,19 +117,21 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <Dropdown placement="bottom-end">
-                <Dropdown.Trigger className="rounded-full outline-none cursor-pointer">
-                  <Avatar
-                    className="ring-2 ring-white/10 hover:ring-blue-500/60 transition-all duration-300"
-                    size="sm"
-                  >
-                    <Avatar.Image
-                      alt={user.name || "User Avatar"}
-                      src={user.image || "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/orange.jpg"}
-                    />
-                    <Avatar.Fallback delayMs={600} className="bg-zinc-800 text-white">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
-                    </Avatar.Fallback>
-                  </Avatar>
+                <Dropdown.Trigger>
+                  <div role="button" tabIndex={0} className="rounded-full outline-none cursor-pointer">
+                    <Avatar
+                      className="ring-2 ring-white/10 hover:ring-blue-500/60 transition-all duration-300"
+                      size="sm"
+                    >
+                      <Avatar.Image
+                        alt={user.name || "User Avatar"}
+                        src={user.image || "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/orange.jpg"}
+                      />
+                      <Avatar.Fallback delayMs={600} className="bg-zinc-800 text-white">
+                        {user.name?.charAt(0).toUpperCase() || "U"}
+                      </Avatar.Fallback>
+                    </Avatar>
+                  </div>
                 </Dropdown.Trigger>
 
                 <Dropdown.Popover className="bg-[#0a0a0c] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.9)] rounded-2xl min-w-[240px]">

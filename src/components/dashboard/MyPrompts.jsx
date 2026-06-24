@@ -281,7 +281,7 @@ export default function MyPrompts({ prompts = [] }) {
             />
             <input
               type="search"
-              value={searchQuery}
+              defaultValue={searchQuery}
               onChange={handleSearch}
               placeholder="Search by title, category, or tool…"
               aria-label="Search prompts"

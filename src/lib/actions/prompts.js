@@ -10,3 +10,6 @@ export async function createPrompt (promptData) {
 
 
 
+  
+  // revalidatePath(`/dashboard/admin/companies`);
+

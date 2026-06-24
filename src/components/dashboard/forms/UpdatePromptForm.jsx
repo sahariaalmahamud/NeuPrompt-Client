@@ -15,20 +15,20 @@ import {
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 const updateSchema = z.object({
-  title:       z.string().min(3, "Title must be at least 3 characters."),
+  title: z.string().min(3, "Title must be at least 3 characters."),
   description: z.string().min(10, "Description must be at least 10 characters."),
-  content:     z.string().min(20, "Prompt content must be at least 20 characters."),
-  category:    z.string().min(1, "Please select a category."),
-  aiTool:      z.string().min(1, "Please select an AI tool."),
-  difficulty:  z.string().min(1, "Please select a difficulty level."),
-  tags:        z.array(z.string()).min(1, "At least one tag is required."),
-  thumbnail:   z.string().url("Please upload a valid thumbnail image."),
-  visibility:  z.enum(["Public", "Private"]),
+  content: z.string().min(20, "Prompt content must be at least 20 characters."),
+  category: z.string().min(1, "Please select a category."),
+  aiTool: z.string().min(1, "Please select an AI tool."),
+  difficulty: z.string().min(1, "Please select a difficulty level."),
+  tags: z.array(z.string()).min(1, "At least one tag is required."),
+  thumbnail: z.string().url("Please upload a valid thumbnail image."),
+  visibility: z.enum(["Public", "Private"]),
 });
 
-const CATEGORIES  = ["Writing","Marketing","Coding","Business","Education","Productivity","Design","Social Media","Research","Other"];
-const AI_TOOLS    = ["ChatGPT","Claude","Gemini","Grok","Perplexity","Copilot","Midjourney"];
-const DIFFICULTIES = ["Beginner","Intermediate","Advanced"];
+const CATEGORIES = ["Writing", "Marketing", "Coding", "Business", "Education", "Productivity", "Design", "Social Media", "Research", "Other"];
+const AI_TOOLS = ["ChatGPT", "Claude", "Gemini", "Grok", "Perplexity", "Copilot", "Midjourney"];
+const DIFFICULTIES = ["Beginner", "Intermediate", "Advanced"];
 
 // ─── Reusable primitives ──────────────────────────────────────────────────────
 
@@ -128,15 +128,15 @@ export default function UpdatePromptForm({ prompt, onSuccess }) {
   useEffect(() => {
     if (prompt) {
       reset({
-        title:       prompt.title       ?? "",
+        title: prompt.title ?? "",
         description: prompt.description ?? "",
-        content:     prompt.content     ?? "",
-        category:    prompt.category    ?? "",
-        aiTool:      prompt.aiTool      ?? "",
-        difficulty:  prompt.difficulty  ?? "",
-        tags:        prompt.tags        ?? [],
-        thumbnail:   prompt.thumbnail   ?? "",
-        visibility:  prompt.visibility  ?? "Public",
+        content: prompt.content ?? "",
+        category: prompt.category ?? "",
+        aiTool: prompt.aiTool ?? "",
+        difficulty: prompt.difficulty ?? "",
+        tags: prompt.tags ?? [],
+        thumbnail: prompt.thumbnail ?? "",
+        visibility: prompt.visibility ?? "Public",
       });
     }
   }, [prompt, reset]);
@@ -191,9 +191,15 @@ export default function UpdatePromptForm({ prompt, onSuccess }) {
     setSuccessMessage("");
     try {
       const updateData = { ...data, updatedAt: new Date() };
+
       console.log("Updating Prompt:", prompt._id, updateData);
-      await new Promise((r) => setTimeout(r, 1000));
-      setSuccessMessage("Changes saved!");
+      
+      const res = await createPrompt(prompt._id, updateData);
+      if (res.insertId) {
+        await new Promise((r) => setTimeout(r, 1000));
+        setSuccessMessage("Changes saved!");
+        e.currentTarget.reset();
+      }
       if (onSuccess) setTimeout(onSuccess, 900);
     } catch (err) {
       console.error(err);

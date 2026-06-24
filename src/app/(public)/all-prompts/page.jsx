@@ -1,4 +1,6 @@
-import AllPrompts from "@/components/marketplace/AllPrompts";
+import AllPrompts from "@/components/allprompts/AllPrompts";
+import { getAllPrompts } from "@/lib/api/prompts";
+
 
 export const metadata = {
   title: "Explore Prompts | NeuPrompt",
@@ -7,79 +9,79 @@ export const metadata = {
 
 // MOCK DATA: Represents the initial load from the database
 // BACKEND INTEGRATION: Replace with actual db.prompts.find({ status: "approved", visibility: "Public" })
-const getMarketplacePrompts = async () => {
-  return [
-    {
-      _id: "m_1",
-      title: "Ultimate SEO Blog Post Generator",
-      description: "Generates fully optimized 2000-word articles with LSI keywords and meta tags.",
-      content: "Act as an expert SEO copywriter...",
-      category: "Marketing",
-      aiTool: "ChatGPT",
-      difficulty: "Intermediate",
-      tags: ["seo", "blog"],
-      thumbnail: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=600&q=80",
-      visibility: "Public",
-      status: "approved",
-      copyCount: 1240,
-      rating: 4.9,
-      totalRatings: 86,
-      featured: true,
-      creatorId: "u_1",
-      creatorName: "Alex Rivera",
-      creatorEmail: "alex@example.com",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      _id: "m_2",
-      title: "React SaaS Component Scaffolder",
-      description: "Create production-ready React components with Tailwind CSS and Framer Motion.",
-      content: "Write a React functional component...",
-      category: "Coding",
-      aiTool: "Claude",
-      difficulty: "Advanced",
-      tags: ["react", "tailwind"],
-      thumbnail: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=600&q=80",
-      visibility: "Public",
-      status: "approved",
-      copyCount: 843,
-      rating: 4.7,
-      totalRatings: 42,
-      featured: false,
-      creatorId: "u_2",
-      creatorName: "Sarah Chen",
-      creatorEmail: "sarah@example.com",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      _id: "m_3",
-      title: "Cold Email Conversion Sequence",
-      description: "A 5-part cold email sequence designed to maximize B2B response rates.",
-      content: "Write a 5-part cold email sequence...",
-      category: "Business",
-      aiTool: "Gemini",
-      difficulty: "Beginner",
-      tags: ["sales", "email"],
-      thumbnail: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&w=600&q=80",
-      visibility: "Public",
-      status: "approved",
-      copyCount: 231,
-      rating: 0, // Testing 0 rating state
-      totalRatings: 0,
-      featured: false,
-      creatorId: "u_3",
-      creatorName: "Marcus Doe",
-      creatorEmail: "marcus@example.com",
-      createdAt: new Date().toISOString(),
-    }
-  ];
-};
+// const getMarketplacePrompts = async () => {
+//   return [
+//     {
+//       _id: "m_1",
+//       title: "Ultimate SEO Blog Post Generator",
+//       description: "Generates fully optimized 2000-word articles with LSI keywords and meta tags.",
+//       content: "Act as an expert SEO copywriter...",
+//       category: "Marketing",
+//       aiTool: "ChatGPT",
+//       difficulty: "Intermediate",
+//       tags: ["seo", "blog"],
+//       thumbnail: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=600&q=80",
+//       visibility: "Public",
+//       status: "approved",
+//       copyCount: 1240,
+//       rating: 4.9,
+//       totalRatings: 86,
+//       featured: true,
+//       creatorId: "u_1",
+//       creatorName: "Alex Rivera",
+//       creatorEmail: "alex@example.com",
+//       createdAt: new Date().toISOString(),
+//     },
+//     {
+//       _id: "m_2",
+//       title: "React SaaS Component Scaffolder",
+//       description: "Create production-ready React components with Tailwind CSS and Framer Motion.",
+//       content: "Write a React functional component...",
+//       category: "Coding",
+//       aiTool: "Claude",
+//       difficulty: "Advanced",
+//       tags: ["react", "tailwind"],
+//       thumbnail: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?auto=format&fit=crop&w=600&q=80",
+//       visibility: "Public",
+//       status: "approved",
+//       copyCount: 843,
+//       rating: 4.7,
+//       totalRatings: 42,
+//       featured: false,
+//       creatorId: "u_2",
+//       creatorName: "Sarah Chen",
+//       creatorEmail: "sarah@example.com",
+//       createdAt: new Date().toISOString(),
+//     },
+//     {
+//       _id: "m_3",
+//       title: "Cold Email Conversion Sequence",
+//       description: "A 5-part cold email sequence designed to maximize B2B response rates.",
+//       content: "Write a 5-part cold email sequence...",
+//       category: "Business",
+//       aiTool: "Gemini",
+//       difficulty: "Beginner",
+//       tags: ["sales", "email"],
+//       thumbnail: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&w=600&q=80",
+//       visibility: "Public",
+//       status: "approved",
+//       copyCount: 231,
+//       rating: 0, // Testing 0 rating state
+//       totalRatings: 0,
+//       featured: false,
+//       creatorId: "u_3",
+//       creatorName: "Marcus Doe",
+//       creatorEmail: "marcus@example.com",
+//       createdAt: new Date().toISOString(),
+//     }
+//   ];
+// };
 
 export default async function MarketplacePage() {
-  const initialPrompts = await getMarketplacePrompts();
-  
+  const allprompts = await getAllPrompts();
+
   // Example count: In production, run a db.prompts.countDocuments()
-  const totalAvailable = 1240; 
+  const totalAvailable = allprompts.length; 
 
   return (
     <div className="min-h-screen bg-[#030303] text-white font-sans relative overflow-hidden">
@@ -106,7 +108,7 @@ export default async function MarketplacePage() {
         </div>
 
         {/* Client Layout Component */}
-        <AllPrompts initialPrompts={initialPrompts} />
+        <AllPrompts allprompts={allprompts} />
         
       </div>
     </div>

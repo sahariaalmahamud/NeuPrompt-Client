@@ -230,7 +230,6 @@ export default function AddPromptForm({ user }) {
                 featured: false,
                 createdAt: new Date(),
             };
-            console.log("Submitting:", promptData);
 
             const res = await createPrompt(promptData);
 
