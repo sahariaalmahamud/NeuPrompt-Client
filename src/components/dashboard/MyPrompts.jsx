@@ -15,12 +15,13 @@ import {
   ChevronRight,
 } from "@gravity-ui/icons";
 import UpdatePromptForm from "./forms/UpdatePromptForm";
+import { deletePrompt } from "@/lib/actions/prompts";
 
 // ─── Badge components ─────────────────────────────────────────────────────────
 
 function StatusBadge({ status }) {
   const styles = {
-    pending:  "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    pending: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     approved: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
     rejected: "bg-red-500/10 text-red-400 border-red-500/20",
   };
@@ -116,7 +117,7 @@ function EditModal({ isOpen, onClose, prompt }) {
 
 // ─── Delete confirmation ──────────────────────────────────────────────────────
 
-function DeleteConfirmModal({ isOpen, onClose, onConfirm, promptTitle }) {
+function DeleteConfirmModal({ isOpen, onClose, onConfirm, promptTitle, isDeleting }) {
   useEffect(() => {
     if (!isOpen) return;
     const handleKey = (e) => { if (e.key === "Escape") onClose(); };
@@ -153,9 +154,10 @@ function DeleteConfirmModal({ isOpen, onClose, onConfirm, promptTitle }) {
           </button>
           <button
             onClick={onConfirm}
-            className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition-colors shadow-[0_4px_12px_rgba(239,68,68,0.25)]"
+            disabled={isDeleting}
+            className="flex-1 h-10 rounded-xl bg-red-600 hover:bg-red-500 text-white text-sm font-medium transition-colors shadow-[0_4px_12px_rgba(239,68,68,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Delete
+            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>
@@ -203,8 +205,8 @@ function ActionButton({ onClick, href, label, variant = "default", children }) {
   const base = "size-8 rounded-lg flex items-center justify-center transition-all duration-150 outline-none focus:ring-1";
   const variants = {
     default: `${base} text-zinc-400 bg-white/5 hover:text-white hover:bg-white/10 focus:ring-white/20`,
-    edit:    `${base} text-blue-400 bg-blue-500/10 hover:text-blue-300 hover:bg-blue-500/20 focus:ring-blue-500/30`,
-    danger:  `${base} text-red-400 bg-red-500/10 hover:text-red-300 hover:bg-red-500/20 focus:ring-red-500/30`,
+    edit: `${base} text-blue-400 bg-blue-500/10 hover:text-blue-300 hover:bg-blue-500/20 focus:ring-blue-500/30`,
+    danger: `${base} text-red-400 bg-red-500/10 hover:text-red-300 hover:bg-red-500/20 focus:ring-red-500/30`,
   };
   if (href) {
     return (
@@ -229,6 +231,7 @@ export default function MyPrompts({ prompts = [] }) {
   const [page, setPage] = useState(1);
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const filteredPrompts = useMemo(() => {
     const q = searchQuery.toLowerCase();
@@ -253,9 +256,17 @@ export default function MyPrompts({ prompts = [] }) {
   };
 
   const handleDelete = async (id) => {
-    console.log("Delete triggered for Prompt ID:", id);
-    setDeleteTarget(null);
-    // TODO: call actual API
+    try {
+      setIsDeleting(true);
+
+      await deletePrompt(id);
+
+      setDeleteTarget(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   // ── Empty state ─────────────────────────────────────────────────────────────
@@ -321,13 +332,13 @@ export default function MyPrompts({ prompts = [] }) {
                   <thead>
                     <tr className="border-b border-white/[0.06] bg-white/[0.02]">
                       {[
-                        { label: "Title",      align: "left",   w: "w-[35%]" },
-                        { label: "AI Tool",    align: "left",   w: "" },
-                        { label: "Visibility", align: "left",   w: "" },
-                        { label: "Status",     align: "left",   w: "" },
-                        { label: "Copies",     align: "center", w: "w-16" },
-                        { label: "Rating",     align: "center", w: "w-16" },
-                        { label: "Actions",    align: "right",  w: "w-28" },
+                        { label: "Title", align: "left", w: "w-[35%]" },
+                        { label: "AI Tool", align: "left", w: "" },
+                        { label: "Visibility", align: "left", w: "" },
+                        { label: "Status", align: "left", w: "" },
+                        { label: "Copies", align: "center", w: "w-16" },
+                        { label: "Rating", align: "center", w: "w-16" },
+                        { label: "Actions", align: "right", w: "w-28" },
                       ].map((col) => (
                         <th
                           key={col.label}
@@ -562,6 +573,7 @@ export default function MyPrompts({ prompts = [] }) {
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => handleDelete(deleteTarget?._id)}
+        isDeleting={isDeleting}
         promptTitle={deleteTarget?.title}
       />
     </>

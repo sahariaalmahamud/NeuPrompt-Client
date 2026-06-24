@@ -15,5 +15,13 @@ export const updatePrompt = async (id, data) => {
     revalidatePath("/dashboard/my-prompts");
     return result;
   }
+
+
+
+export const deletePrompt = async (id) => {
+    const result = serverMutation(`/api/prompts/${id}`, null, 'DELETE');
+    revalidatePath("/dashboard/my-prompts");
+    return result;
+  }
   
 

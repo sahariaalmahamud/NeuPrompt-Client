@@ -19,18 +19,42 @@ export async function serverFetch(path) {
 
 
 
+// export async function serverMutation(path, data, method = "POST") {
+//   // Implementation for creating a prompt
+//   const response = await fetch(`${baseUrl}${path}`, {
+//     method: method,
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(data),
+//   });
+
+//   return handleErrorResponse(response) || response.json();
+// }
+
+
 export async function serverMutation(path, data, method = "POST") {
-  // Implementation for creating a job
-  const response = await fetch(`${baseUrl}${path}`, {
-    method: method,
+  const options = {
+    method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
-  });
+  };
+
+  if (data !== null && data !== undefined) {
+    options.body = JSON.stringify(data);
+  }
 
 
-  return handleErrorResponse(response) || response.json();
+  handleErrorResponse(response);
+
+
+  if (!contentType?.includes("application/json")) {
+    const text = await response.text();
+    throw new Error(`Expected JSON but received: ${text}`);
+  }
+
+  return response.json();
 }
 
 //handle: 400, 401, 403, 500 errors
