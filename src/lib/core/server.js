@@ -12,14 +12,11 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 // }
 
 export async function serverFetch(path) {
-  const response = await fetch(`${baseUrl}${path}`, {
-    headers: {
-      ...await authHeaders(),
-    },
-  });
+  const response = await fetch(`${baseUrl}${path}`);
   //handle: 400, 401, 403, 500 errors
   return handleErrorResponse(response) || response.json();
 }
+
 
 
 export async function serverMutation(path, data, method = "POST") {
