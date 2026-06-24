@@ -1,6 +1,7 @@
 "use server";
 
 
+import { revalidatePath } from "next/cache";
 import { serverMutation } from "../core/server";
 
 export async function createPrompt (promptData) {
@@ -9,7 +10,10 @@ export async function createPrompt (promptData) {
 }
 
 
-
+export const updatePrompt = async (id, data) => {
+    const result = serverMutation(`/api/prompts/${id}`, data, 'PATCH');
+    revalidatePath("/dashboard/my-prompts");
+    return result;
+  }
   
-  // revalidatePath(`/dashboard/admin/companies`);
 

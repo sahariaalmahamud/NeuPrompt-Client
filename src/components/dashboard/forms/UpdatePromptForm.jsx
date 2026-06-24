@@ -12,6 +12,7 @@ import {
   Check,
   ChevronDown,
 } from "@gravity-ui/icons";
+import { updatePrompt } from "@/lib/actions/prompts";
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
 const updateSchema = z.object({
@@ -192,13 +193,10 @@ export default function UpdatePromptForm({ prompt, onSuccess }) {
     try {
       const updateData = { ...data, updatedAt: new Date() };
 
-      console.log("Updating Prompt:", prompt._id, updateData);
-      
-      const res = await createPrompt(prompt._id, updateData);
+      const res = await updatePrompt(prompt._id, updateData);
       if (res.insertId) {
         await new Promise((r) => setTimeout(r, 1000));
         setSuccessMessage("Changes saved!");
-        e.currentTarget.reset();
       }
       if (onSuccess) setTimeout(onSuccess, 900);
     } catch (err) {
