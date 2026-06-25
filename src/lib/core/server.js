@@ -50,11 +50,13 @@ export async function serverMutation(path, data, method = "POST") {
 
   handleErrorResponse(response);
 
+  const result = await response.json();
+
   if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
+    throw new Error(result.message || `Request failed: ${response.status}`);
   }
 
-  return response.json();
+  return result;
 }
 
 //handle: 400, 401, 403, 500 errors

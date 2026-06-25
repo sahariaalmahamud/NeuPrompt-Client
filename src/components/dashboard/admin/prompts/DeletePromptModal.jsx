@@ -1,5 +1,6 @@
 "use client";
 
+import { adminDeletePrompt } from "@/lib/actions/prompts";
 import ConfirmModal from "./ConfirmModal";
 import { TrashBin } from "@gravity-ui/icons";
 
@@ -14,10 +15,13 @@ export default function DeletePromptModal({ isOpen, onClose, prompt }) {
   if (!prompt) return null;
 
   const handleDelete = async () => {
-    // BACKEND INTEGRATION POINT — replace console.log with the API call:
-    // await fetch(`/api/prompts/${prompt._id}`, { method: "DELETE" });
-    console.log("Deleting prompt:", prompt._id);
-    onClose();
+    try {
+      await adminDeletePrompt(prompt._id);
+
+      onClose();
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
   };
 
   return (

@@ -17,7 +17,7 @@ export const updatePrompt = async (id, data) => {
   return result;
 }
 
-
+// Delete prompt by creator 
 export const deletePrompt = async (id) => {
   const result = serverMutation(`/api/prompts/${id}`, null, 'DELETE');
   revalidatePath("/dashboard/my-prompts");
@@ -50,6 +50,18 @@ export async function toggleFeaturePrompt(id) {
   const result = await serverMutation(`/api/admin/prompts/${id}/feature`, null, "PATCH");
 
   revalidatePath("/dashboard/admin/all-prompts");
+  revalidatePath("/prompts");
+
+  return result;
+}
+
+
+//Delete prompt by admin
+export async function adminDeletePrompt(id) {
+  const result = await serverMutation(`/api/admin/prompts/${id}`, null, "DELETE");
+
+  revalidatePath("/dashboard/admin/all-prompts");
+  revalidatePath("/dashboard/my-prompts");
   revalidatePath("/prompts");
 
   return result;
