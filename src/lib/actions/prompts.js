@@ -35,3 +35,12 @@ export async function approvePrompt(id) {
   return result;
 }
 
+
+export async function rejectPrompt(id, rejectionNote) {
+  const result = await serverMutation(`/api/admin/prompts/${id}/reject`, { rejectionNote }, "PATCH");
+
+  revalidatePath("/dashboard/admin/all-prompts");
+  revalidatePath("/prompts");
+
+  return result;
+}

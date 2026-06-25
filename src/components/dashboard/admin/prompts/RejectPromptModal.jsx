@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ConfirmModal from "./ConfirmModal";
 import { Xmark } from "@gravity-ui/icons";
+import { rejectPrompt } from "@/lib/actions/prompts";
 
 // ─── RejectPromptModal ────────────────────────────────────────────────────────
 // BACKEND INTEGRATION:
@@ -31,7 +32,7 @@ export default function RejectPromptModal({ isOpen, onClose, prompt }) {
     //   body: JSON.stringify({ reason }),
     //   headers: { "Content-Type": "application/json" },
     // });
-    console.log("Rejecting prompt:", prompt._id, "reason:", reason);
+    rejectPrompt(prompt._id, reason);
     onClose();
   };
 
