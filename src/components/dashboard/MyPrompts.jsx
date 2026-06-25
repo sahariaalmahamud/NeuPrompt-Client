@@ -412,7 +412,7 @@ export default function MyPrompts({ prompts = [] }) {
                         <td className="px-5 py-4">
                           <div className="flex items-center justify-end gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
                             <ActionButton
-                              href={`/all-prompts/${prompt._id}`}
+                              href={`/prompts/${prompt._id}`}
                               label={`View "${prompt.title}"`}
                               variant="default"
                             >
@@ -476,7 +476,7 @@ export default function MyPrompts({ prompts = [] }) {
                     {/* Actions */}
                     <div className="flex items-center gap-2 pt-1 border-t border-white/5">
                       <ActionButton
-                        href={`/all-prompts/${prompt._id}`}
+                        href={`/prompts/${prompt._id}`}
                         label={`View "${prompt.title}"`}
                         variant="default"
                       >

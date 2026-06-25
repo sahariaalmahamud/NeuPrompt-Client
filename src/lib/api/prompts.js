@@ -15,6 +15,8 @@ export async function getPromptById(id) {
   return serverFetch(`/api/prompts/${id}`);
 }
 
-
+export async function getAdminAllPrompts() {
+  return serverFetch(`/api/admin/prompts`);
+}
 
 

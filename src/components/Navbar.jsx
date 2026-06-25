@@ -48,7 +48,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "All Prompts", href: "/all-prompts" },
+    { name: "All Prompts", href: "/prompts" },
     { name: "Pricing", href: "/plans" },
   ];
 

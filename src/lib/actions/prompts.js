@@ -4,24 +4,34 @@
 import { revalidatePath } from "next/cache";
 import { serverMutation } from "../core/server";
 
-export async function createPrompt (promptData) {
+export async function createPrompt(promptData) {
   const response = serverMutation('/api/prompts', promptData);
   return response;
 }
 
 
 export const updatePrompt = async (id, data) => {
-    const result = serverMutation(`/api/prompts/${id}`, data, 'PATCH');
-    revalidatePath("/dashboard/my-prompts");
-    return result;
-  }
-
+  const result = serverMutation(`/api/prompts/${id}`, data, 'PATCH');
+  revalidatePath("/dashboard/my-prompts");
+  revalidatePath("/dashboard/admin/all-prompts");
+  return result;
+}
 
 
 export const deletePrompt = async (id) => {
-    const result = serverMutation(`/api/prompts/${id}`, null, 'DELETE');
-    revalidatePath("/dashboard/my-prompts");
-    return result;
-  }
-  
+  const result = serverMutation(`/api/prompts/${id}`, null, 'DELETE');
+  revalidatePath("/dashboard/my-prompts");
+  revalidatePath("/dashboard/all-prompts");
+  return result;
+}
+
+
+export async function approvePrompt(id) {
+  const result = await serverMutation(`/api/admin/prompts/${id}/approve`, null, "PATCH");
+
+  revalidatePath(`/dashboard/admin/all-prompts/${id}`);
+  revalidatePath(`/prompts/${id}`);
+
+  return result;
+}
 

@@ -12,8 +12,9 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 // }
 
 export async function serverFetch(path) {
-  const response = await fetch(`${baseUrl}${path}`);
-  //handle: 400, 401, 403, 500 errors
+  const response = await fetch(`${baseUrl}${path}`, {
+    cache: "no-store",
+  });
   return handleErrorResponse(response) || response.json();
 }
 
@@ -45,13 +46,12 @@ export async function serverMutation(path, data, method = "POST") {
     options.body = JSON.stringify(data);
   }
 
+  const response = await fetch(`${baseUrl}${path}`, options);
 
   handleErrorResponse(response);
 
-
-  if (!contentType?.includes("application/json")) {
-    const text = await response.text();
-    throw new Error(`Expected JSON but received: ${text}`);
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
   }
 
   return response.json();

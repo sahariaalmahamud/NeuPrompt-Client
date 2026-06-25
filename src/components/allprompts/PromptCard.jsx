@@ -81,7 +81,7 @@ export default function PromptCard({ prompt }) {
             </div>
 
             <Link 
-              href={`/all-prompts/${prompt._id}`}
+              href={`/prompts/${prompt._id}`}
               className="text-sm font-medium text-white bg-white/5 hover:bg-blue-600 border border-white/10 hover:border-blue-500 px-4 py-1.5 rounded-lg transition-all"
             >
               View Details
