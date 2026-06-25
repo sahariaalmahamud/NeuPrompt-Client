@@ -227,6 +227,9 @@ export default function AddPromptForm({ user }) {
                 role: user?.role,
                 status: "pending",
                 copyCount: 0,
+                bookmarkCount: 0,
+                rating: 0,
+                totalRatings: 0,
                 featured: false,
                 createdAt: new Date(),
             };

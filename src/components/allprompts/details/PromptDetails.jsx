@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Card, Avatar } from "@heroui/react";
 import {
@@ -14,6 +14,9 @@ import {
   Person
 } from "@gravity-ui/icons";
 import { incrementCopyCount } from "@/lib/actions/prompts";
+import { createBookmark, removeBookmark } from "@/lib/actions/bookmarks";
+import { useSession } from "@/lib/auth-client";
+import { checkBookmark } from "@/lib/api/bookmarks";
 
 // ----------------------------------------------------------------------
 // FRAMER MOTION VARIANTS
@@ -32,9 +35,30 @@ const fadeUp = {
 };
 
 export default function PromptDetails({ prompt }) {
+
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const [copyCount, setCopyCount] = useState(prompt.copyCount || 0);
   const [isCopied, setIsCopied] = useState(false);
+
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const fetchBookmarkStatus = async () => {
+      const status = await checkBookmark(
+        user.id,
+        prompt._id
+      );
+
+      setIsBookmarked(status.bookmarked);
+    };
+
+    fetchBookmarkStatus();
+
+  }, [user?.id, prompt?._id]);
 
   if (!prompt) return null;
 
@@ -69,10 +93,50 @@ export default function PromptDetails({ prompt }) {
     }
   };
 
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    // BACKEND INTEGRATION: Toggle bookmark status in user's saved prompts
-    // fetch(`/api/users/bookmarks`, { method: 'POST', body: JSON.stringify({ promptId: prompt._id }) });
+  const handleBookmark = async () => {
+
+    if (!user?.id) {
+      alert("Please login first");
+      return;
+    }
+
+    try {
+
+      if (isBookmarked) {
+
+        const result = await removeBookmark({
+          userId: user.id,
+          promptId: prompt._id
+        });
+
+        if (!result.success) {
+          alert(result.message);
+          return;
+        }
+
+        setIsBookmarked(false);
+        alert("Bookmark removed!");
+
+        return;
+      }
+
+      const result = await createBookmark({
+        userId: user.id,
+        promptId: prompt._id
+      });
+
+      if (!result.success) {
+        alert(result.message);
+        return;
+      }
+
+      setIsBookmarked(true);
+      alert("Bookmarked!");
+
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
+    }
   };
 
   const handleReport = () => {
@@ -169,6 +233,7 @@ export default function PromptDetails({ prompt }) {
 
                 <Button
                   onClick={handleBookmark}
+                  disabled={isBookmarked}
                   className={`h-12 px-6 border rounded-xl font-medium transition-all flex items-center gap-2 ${isBookmarked
                     ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
                     : "bg-[#0a0a0c] border-white/10 text-zinc-300 hover:bg-white/5"

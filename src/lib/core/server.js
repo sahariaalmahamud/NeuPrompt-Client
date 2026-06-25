@@ -50,10 +50,20 @@ export async function serverMutation(path, data, method = "POST") {
 
   handleErrorResponse(response);
 
-  const result = await response.json();
+  const text = await response.text();
+  let result = null;
+
+  if (text) {
+    try {
+      result = JSON.parse(text);
+    } catch (err) {
+      result = text;
+    }
+  }
 
   if (!response.ok) {
-    throw new Error(result.message || `Request failed: ${response.status}`);
+    const message = result?.message || (typeof result === "string" ? result : `Request failed: ${response.status}`);
+    throw new Error(message);
   }
 
   return result;

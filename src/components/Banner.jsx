@@ -63,15 +63,26 @@ export default function Banner() {
   // BOT BLINKING LOGIC
   // ----------------------------------------------------------------------
   const eyeBlinkControls = useAnimation();
+  const isMounted = useRef(false);
+
   useEffect(() => {
+    isMounted.current = true;
     let timeoutId;
+
     const triggerBlink = async () => {
+      if (!isMounted.current) return;
       await eyeBlinkControls.start({ scaleY: 0.1, transition: { duration: 0.1 } });
+      if (!isMounted.current) return;
       await eyeBlinkControls.start({ scaleY: 1, transition: { duration: 0.15 } });
+      if (!isMounted.current) return;
       timeoutId = setTimeout(triggerBlink, Math.random() * 4000 + 2000);
     };
+
     timeoutId = setTimeout(triggerBlink, 2000);
-    return () => clearTimeout(timeoutId);
+    return () => {
+      isMounted.current = false;
+      clearTimeout(timeoutId);
+    };
   }, [eyeBlinkControls]);
 
   // ----------------------------------------------------------------------
