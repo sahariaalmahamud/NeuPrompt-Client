@@ -44,3 +44,13 @@ export async function rejectPrompt(id, rejectionNote) {
 
   return result;
 }
+
+
+export async function toggleFeaturePrompt(id) {
+  const result = await serverMutation(`/api/admin/prompts/${id}/feature`, null, "PATCH");
+
+  revalidatePath("/dashboard/admin/all-prompts");
+  revalidatePath("/prompts");
+
+  return result;
+}

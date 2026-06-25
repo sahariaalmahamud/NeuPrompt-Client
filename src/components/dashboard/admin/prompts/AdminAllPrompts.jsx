@@ -9,6 +9,7 @@ import RejectPromptModal from "./RejectPromptModal";
 import DeletePromptModal from "./DeletePromptModal";
 import EmptyState from "./EmptyState";
 import LoadingSkeleton from "./LoadingSkeleton";
+import { toggleFeaturePrompt } from "@/lib/actions/prompts";
 
 // ─── AdminAllPrompts ──────────────────────────────────────────────────────────
 // Main client orchestrator for the admin prompts page.
@@ -64,14 +65,40 @@ export default function AdminAllPrompts({ allPrompts }) {
     if (type === "delete") setIsDeleteOpen(true);
   };
 
-  const handleToggleFeature = (promptId, currentFeatured) => {
-    // BACKEND INTEGRATION:
-    //   PATCH /api/admin/prompts/${promptId}/feature  body: { featured: !currentFeatured }
-    //   On success: update the list.
-    // Optimistic UI update:
+  // const handleToggleFeature = (promptId, currentFeatured) => {
+  //   // BACKEND INTEGRATION:
+  //   //   PATCH /api/admin/prompts/${promptId}/feature  body: { featured: !currentFeatured }
+  //   //   On success: update the list.
+  //   // Optimistic UI update:
+  //   setPrompts((prev) =>
+  //     prev.map((p) => p._id === promptId ? { ...p, featured: !currentFeatured } : p)
+  //   );
+  // };
+
+  const handleToggleFeature = async (promptId, currentFeatured) => {
+    // Optimistic Update
     setPrompts((prev) =>
-      prev.map((p) => p._id === promptId ? { ...p, featured: !currentFeatured } : p)
+      prev.map((p) =>
+        p._id === promptId
+          ? { ...p, featured: !currentFeatured }
+          : p
+      )
     );
+
+    try {
+      await toggleFeaturePrompt(promptId);
+    } catch (error) {
+      console.error(error);
+
+      // Rollback if failed
+      setPrompts((prev) =>
+        prev.map((p) =>
+          p._id === promptId
+            ? { ...p, featured: currentFeatured }
+            : p
+        )
+      );
+    }
   };
 
   const hasSearch = !!searchQuery.trim();

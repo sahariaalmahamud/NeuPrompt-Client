@@ -1,5 +1,6 @@
 import PromptRow from "./PromptRow";
 import PromptMobileCard from "./PromptMobileCard";
+import { toggleFeaturePrompt } from "@/lib/actions/prompts";
 
 // ─── Column definition ────────────────────────────────────────────────────────
 const COLUMNS = [
@@ -61,7 +62,7 @@ export default function PromptsTable({ prompts, onOpenModal, onToggleFeature }) 
               prompt={prompt}
               index={index}
               onOpenModal={onOpenModal}
-              onToggleFeature={onToggleFeature}
+              toggleFeaturePrompt={toggleFeaturePrompt}
             />
           </div>
         ))}
