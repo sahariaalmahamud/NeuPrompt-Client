@@ -66,3 +66,14 @@ export async function adminDeletePrompt(id) {
 
   return result;
 }
+
+
+
+export async function incrementCopyCount(id) {
+  const result = await serverMutation(`/api/prompts/${id}/copy`, null, "PATCH");
+
+  revalidatePath("/prompts");
+  revalidatePath(`/prompts/${id}`);
+
+  return result;
+}

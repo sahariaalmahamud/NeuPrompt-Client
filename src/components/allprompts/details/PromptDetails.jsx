@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button, Card, Avatar } from "@heroui/react";
-import { 
-  Copy, 
-  Check, 
-  Bookmark, 
-  Star, 
-  ShieldExclamation, 
-  Calendar, 
-  Eye, 
-  Person 
+import {
+  Copy,
+  Check,
+  Bookmark,
+  Star,
+  ShieldExclamation,
+  Calendar,
+  Eye,
+  Person
 } from "@gravity-ui/icons";
+import { incrementCopyCount } from "@/lib/actions/prompts";
 
 // ----------------------------------------------------------------------
 // FRAMER MOTION VARIANTS
@@ -31,6 +32,7 @@ const fadeUp = {
 };
 
 export default function PromptDetails({ prompt }) {
+  const [copyCount, setCopyCount] = useState(prompt.copyCount || 0);
   const [isCopied, setIsCopied] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -47,13 +49,23 @@ export default function PromptDetails({ prompt }) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(prompt.content);
+
+      // Optimistic Update
+      setCopyCount((prev) => prev + 1);
+
+      await incrementCopyCount(prompt._id);
+
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-      
-      // BACKEND INTEGRATION: Trigger an API call here to increment 'copyCount'
-      // fetch(`/api/prompts/${prompt._id}/copy`, { method: 'POST' });
+
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+
     } catch (err) {
       console.error("Failed to copy!", err);
+
+      // Rollback if API fails
+      setCopyCount((prev) => prev - 1);
     }
   };
 
@@ -90,32 +102,32 @@ export default function PromptDetails({ prompt }) {
       {/* Background Glow */}
       <div className="absolute top-0 right-1/4 w-[600px] h-[400px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none z-0" />
 
-      <motion.div 
+      <motion.div
         variants={staggerContainer}
         initial="hidden"
         animate="show"
         className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 relative z-10"
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* ========================================================= */}
           {/* LEFT COLUMN: HERO, CONTENT, TAGS, REVIEWS (Spans 8 cols)  */}
           {/* ========================================================= */}
           <div className="lg:col-span-8 flex flex-col gap-8">
-            
+
             {/* 1. HERO SECTION */}
             <motion.div variants={fadeUp} className="flex flex-col gap-6">
-              
+
               {/* Thumbnail */}
               <div className="w-full h-64 sm:h-80 lg:h-96 rounded-3xl overflow-hidden border border-white/5 relative bg-[#0a0a0c]">
-                <img 
-                  src={prompt.thumbnail} 
-                  alt={prompt.title} 
+                <img
+                  src={prompt.thumbnail}
+                  alt={prompt.title}
                   className="w-full h-full object-cover opacity-90"
                 />
                 {/* Image Overlay Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent opacity-80" />
-                
+
                 {/* Badges Floating on Image */}
                 <div className="absolute bottom-4 left-4 flex flex-wrap items-center gap-2">
                   {prompt.featured && (
@@ -147,27 +159,26 @@ export default function PromptDetails({ prompt }) {
 
               {/* Hero Action Bar */}
               <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/5">
-                <Button 
+                <Button
                   onClick={handleCopy}
                   className="h-12 px-8 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all flex items-center gap-2"
                 >
                   {isCopied ? <Check size={18} /> : <Copy size={18} />}
                   {isCopied ? "Copied!" : "Copy Prompt"}
                 </Button>
-                
-                <Button 
+
+                <Button
                   onClick={handleBookmark}
-                  className={`h-12 px-6 border rounded-xl font-medium transition-all flex items-center gap-2 ${
-                    isBookmarked 
-                      ? "bg-blue-500/10 border-blue-500/30 text-blue-400" 
-                      : "bg-[#0a0a0c] border-white/10 text-zinc-300 hover:bg-white/5"
-                  }`}
+                  className={`h-12 px-6 border rounded-xl font-medium transition-all flex items-center gap-2 ${isBookmarked
+                    ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
+                    : "bg-[#0a0a0c] border-white/10 text-zinc-300 hover:bg-white/5"
+                    }`}
                 >
                   <Bookmark size={18} />
                   {isBookmarked ? "Saved" : "Save"}
                 </Button>
 
-                <button 
+                <button
                   onClick={handleReport}
                   className="ml-auto flex items-center gap-2 text-sm text-zinc-500 hover:text-red-400 transition-colors"
                 >
@@ -181,7 +192,7 @@ export default function PromptDetails({ prompt }) {
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 Prompt Configuration
               </h2>
-              
+
               <div className="bg-[#0a0a0c] border border-white/10 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
                 {/* Fake Window Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
@@ -191,15 +202,15 @@ export default function PromptDetails({ prompt }) {
                     <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                     <span className="ml-3 text-xs text-zinc-500 font-mono tracking-wider">prompt_data.txt</span>
                   </div>
-                  <button 
+                  <button
                     onClick={handleCopy}
                     className="text-xs font-mono font-medium text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors"
                   >
-                    {isCopied ? <Check size={14} className="text-emerald-400"/> : <Copy size={14} />}
+                    {isCopied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                     {isCopied ? "COPIED" : "COPY"}
                   </button>
                 </div>
-                
+
                 {/* Code Body */}
                 <div className="p-6 overflow-x-auto">
                   <pre className="text-zinc-300 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words">
@@ -216,8 +227,8 @@ export default function PromptDetails({ prompt }) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {prompt.tags.map(tag => (
-                  <span 
-                    key={tag} 
+                  <span
+                    key={tag}
                     className="px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium rounded-lg hover:bg-blue-500/20 hover:scale-105 transition-all cursor-default"
                   >
                     #{tag}
@@ -248,7 +259,7 @@ export default function PromptDetails({ prompt }) {
           {/* RIGHT COLUMN: CREATOR SIDEBAR (Spans 4 cols)              */}
           {/* ========================================================= */}
           <div className="lg:col-span-4">
-            <motion.div 
+            <motion.div
               variants={fadeUp}
               className="sticky top-24 bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col gap-6"
             >
@@ -258,10 +269,10 @@ export default function PromptDetails({ prompt }) {
                   Created By
                 </h3>
                 <div className="flex items-center gap-3">
-                  <Avatar 
-                    src={`https://ui-avatars.com/api/?name=${prompt.creatorName}&background=0D8ABC&color=fff`} 
-                    name={prompt.creatorName} 
-                    size="md" 
+                  <Avatar
+                    src={`https://ui-avatars.com/api/?name=${prompt.creatorName}&background=0D8ABC&color=fff`}
+                    name={prompt.creatorName}
+                    size="md"
                     className="ring-2 ring-white/10"
                   />
                   <div className="flex flex-col">
@@ -278,7 +289,7 @@ export default function PromptDetails({ prompt }) {
                 <h3 className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 font-mono">
                   Prompt Details
                 </h3>
-                
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1 p-3 bg-[#030303] border border-white/5 rounded-xl shadow-inner">
                     <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
@@ -296,7 +307,7 @@ export default function PromptDetails({ prompt }) {
                       <span className="text-xs font-medium">Copies</span>
                     </div>
                     <span className="text-lg font-bold text-white leading-none">
-                      {prompt.copyCount || 0}
+                      {copyCount || 0}
                     </span>
                   </div>
                 </div>
@@ -309,7 +320,7 @@ export default function PromptDetails({ prompt }) {
                     </div>
                     <span className="text-zinc-300 font-medium">{formattedDate}</span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-2 text-zinc-400">
                       <Eye size={14} /> Visibility

@@ -1,6 +1,11 @@
 import Banner from "@/components/Banner";
+import FeaturedPrompts from "@/components/FeaturedPrompts";
+import { getFeaturedPrompts } from "@/lib/api/prompts";
 
-export default function Home() {
+export default async function Home() {
+
+  const featuredPrompts = await getFeaturedPrompts()
+
   return (
     <>
       {/* Main Container with hidden overflow to contain the massive glows */}
@@ -8,7 +13,7 @@ export default function Home() {
 
         {/* HERO BANNER SECTION */}
         <Banner />
-
+        <FeaturedPrompts prompts={featuredPrompts} />
       </div>
     </>
   );

@@ -20,3 +20,6 @@ export async function getAdminAllPrompts() {
 }
 
 
+export async function getFeaturedPrompts() {
+  return serverFetch("/api/featured-prompts");
+}
