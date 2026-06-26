@@ -18,8 +18,6 @@ const reviewSchema = z.object({
 
 export default function ReviewModal({ isOpen, onOpenChange, promptId, user }) {
 
-  console.log('reviewModal', promptId, user);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors }, reset } = useForm({
@@ -43,6 +41,8 @@ export default function ReviewModal({ isOpen, onOpenChange, promptId, user }) {
       const result = await createReview({
         promptId,
         userId: user.id,
+        userName: user.name,
+        userImage: user.image,
         rating: data.rating,
         comment: data.comment,
         createdAt: new Date(),

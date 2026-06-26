@@ -3,14 +3,18 @@
 import { motion } from "framer-motion";
 import { Avatar } from "@heroui/react";
 import { Star } from "@gravity-ui/icons";
+import Image from "next/image";
 
 export default function ReviewCard({ review }) {
+
+  console.log('review', review);
+
   const formattedDate = new Date(review.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric'
   });
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -2 }}
@@ -18,10 +22,12 @@ export default function ReviewCard({ review }) {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <Avatar 
-            src={review.avatarUrl || `https://ui-avatars.com/api/?name=${review.userName}&background=2A2A35&color=fff`} 
-            name={review.userName} 
-            size="sm" 
+          <Image
+            src={review.userImage}
+            alt={review.userName}
+            width={32}
+            height={32}
+            className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10"
           />
           <div className="flex flex-col">
             <span className="text-sm font-semibold text-white">{review.userName}</span>
@@ -32,10 +38,10 @@ export default function ReviewCard({ review }) {
         {/* Star Rating Render */}
         <div className="flex items-center gap-0.5">
           {[...Array(5)].map((_, i) => (
-            <Star 
-              key={i} 
-              size={14} 
-              className={i < review.rating ? "text-amber-500" : "text-white/10"} 
+            <Star
+              key={i}
+              size={14}
+              className={i < review.rating ? "text-amber-500" : "text-white/10"}
             />
           ))}
         </div>

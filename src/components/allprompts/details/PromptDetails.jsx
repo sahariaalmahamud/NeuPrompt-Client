@@ -31,7 +31,7 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
 };
 
-export default function PromptDetails({ prompt }) {
+export default function PromptDetails({ prompt, reviews }) {
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -189,6 +189,7 @@ export default function PromptDetails({ prompt }) {
               <ReviewsSection
                 promptId={prompt._id} 
                 user={user} 
+                reviews={reviews}
                 stats={{ rating: prompt.rating || 0, total: prompt.totalRatings || 0 }} 
               />
             </motion.div>
