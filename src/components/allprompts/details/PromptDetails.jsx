@@ -238,6 +238,7 @@ export default function PromptDetails({ prompt, reviews }) {
         isOpen={isReportModalOpen} 
         onOpenChange={setIsReportModalOpen} 
         promptId={prompt._id} 
+        creatorId={prompt.creatorId} 
         user={user} 
       />
     </div>

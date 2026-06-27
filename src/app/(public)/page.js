@@ -6,6 +6,8 @@ export default async function Home() {
 
   const featuredPrompts = await getFeaturedPrompts()
 
+  console.log('featuredPrompts', featuredPrompts);
+
   return (
     <>
       {/* Main Container with hidden overflow to contain the massive glows */}

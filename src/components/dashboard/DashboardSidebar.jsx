@@ -63,7 +63,7 @@ export default function DashboardSidebar() {
     { icon: Factory, href: "/dashboard/admin/all-users", label: "Users" },
     { icon: Briefcase, href: "/dashboard/admin/all-prompts", label: "Prompts" },
     { icon: CreditCard, href: "/dashboard/admin/payments", label: "Payments" },
-    { icon: Gear, href: "/dashboard/admin/reported-prompts", label: "Reports" },
+    { icon: Gear, href: "/dashboard/admin/reports", label: "Reports" },
   ];
 
   const navLinkMap = { user: userNavLinks, creator: creatorNavLinks, admin: adminNavLinks };

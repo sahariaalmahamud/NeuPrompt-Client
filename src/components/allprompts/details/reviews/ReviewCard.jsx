@@ -6,9 +6,6 @@ import { Star } from "@gravity-ui/icons";
 import Image from "next/image";
 
 export default function ReviewCard({ review }) {
-
-  console.log('review', review);
-
   const formattedDate = new Date(review.createdAt).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric'
   });
