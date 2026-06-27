@@ -112,7 +112,7 @@ export default function DashboardSidebar() {
               </span>
               <span className="w-px h-3 bg-white/10" />
               <span className="text-[10px] uppercase tracking-wider font-semibold text-blue-400">
-                {user?.subscription || "Pro"}
+                {user?.plan}
               </span>
             </div>
           </div>

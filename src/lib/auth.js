@@ -22,18 +22,30 @@ export const auth = betterAuth({
     }),
     user: {
         additionalFields: {
-            role: {
-                default: "user",
-            },
-            onboardingCompleted: {
-                type: "boolean",
-                default: false // Brand new users will have this as false
-            }
-            // plan: {
-            //     default: "user_free",
-            // },
+            role: { type: "string", default: "user" },
+            onboardingCompleted: { type: "boolean", default: false },
+            plan: { type: "string", default: "free" }
         },
     },
+
+    //  DATABASE HOOK 
+    databaseHooks: {
+        user: {
+            create: {
+                before: async (user) => {
+                    // This injects the defaults into MongoDB right before saving
+                    return {
+                        data: {
+                            ...user,
+                            plan: user.plan || "free",
+                            role: user.role || "user",
+                            onboardingCompleted: user.onboardingCompleted || false
+                        }
+                    };
+                }
+            }
+        }
+    }
     // plugins: [
     //     admin(),
     // ],

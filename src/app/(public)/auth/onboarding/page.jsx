@@ -31,7 +31,7 @@ export default function OnboardingPage() {
     if (session.user.onboardingCompleted) {
       // Existing User -> Redirect instantly based on role
       if (session.user.role === "creator") {
-        router.replace("/dashboard/creator");
+        router.replace("/");
       } else {
         router.replace("/prompts");
       }
@@ -61,7 +61,7 @@ export default function OnboardingPage() {
       if (role === "creator") {
         router.push("/dashboard/creator");
       } else {
-        router.push("/marketplace");
+        router.push("/prompts");
       }
     } catch (err) {
       setError(err.message || "Failed to update profile. Please try again.");

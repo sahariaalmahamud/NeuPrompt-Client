@@ -78,7 +78,7 @@ function SignupContent() {
       const { data, error: authError } = await signUp.email({ email, password, name, role, image });
       if (!authError) {
         // Direct routing based on Role
-        router.push(role === "creator" ? "/dashboard/creator" : "/marketplace");
+        router.push(role === "creator" ? "/" : "/prompts");
       } else {
         setError(authError.message || "Something went wrong during signup.");
       }
