@@ -1,5 +1,7 @@
 import Banner from "@/components/Banner";
 import FeaturedPrompts from "@/components/FeaturedPrompts";
+import HowItWorks from "@/components/HowItWorks";
+import WhyNeuPrompt from "@/components/WhyNeuPrompt";
 import { getFeaturedPrompts } from "@/lib/api/prompts";
 
 export default async function Home() {
@@ -15,7 +17,9 @@ export default async function Home() {
 
         {/* HERO BANNER SECTION */}
         <Banner />
+        <HowItWorks/>
         <FeaturedPrompts prompts={featuredPrompts} />
+        <WhyNeuPrompt/>
       </div>
     </>
   );

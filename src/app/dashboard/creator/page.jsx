@@ -1,10 +1,13 @@
 import CreatorStats from "@/components/dashboard/creator/CreatorStats";
+import { getMyPrompts } from "@/lib/api/prompts";
 import { getUserSession } from "@/lib/core/session";
 
 
 export default async function CreatorDashboardHomePage() {
   // Fetch user session securely on the server
   const user = await getUserSession();
+
+  const myStats = await getMyPrompts(user?.id);
 
   return (
     <div className="max-w-[90%] mx-auto w-full">
@@ -19,7 +22,7 @@ export default async function CreatorDashboardHomePage() {
       </div>
 
       {/* 📊 STATS GRID (Client Component) */}
-      <CreatorStats />
+      <CreatorStats myStats={myStats} />
     </div>
   );
 }

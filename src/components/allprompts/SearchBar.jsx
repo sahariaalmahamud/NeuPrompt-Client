@@ -44,14 +44,14 @@ export default function SearchBar({ value, onChange }) {
         role="searchbox"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Search for prompts by keyword, tool, or goal…"
+        placeholder="Search for prompts by title, keyword, or goal…"
         aria-label="Search prompts"
         autoComplete="off"
-        className="w-full h-14 pl-14 pr-12 bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/10
+        className={`w-full h-14 pl-14 pr-12 bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/10
           rounded-2xl text-base text-white placeholder:text-zinc-600 outline-none
           transition-all duration-200
           hover:border-white/20
-          focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50"
+          focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50`}
       />
 
       {/* Clear button — only rendered when input has a value */}

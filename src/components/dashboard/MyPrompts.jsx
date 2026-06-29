@@ -16,6 +16,8 @@ import {
 } from "@gravity-ui/icons";
 import UpdatePromptForm from "./forms/UpdatePromptForm";
 import { deletePrompt } from "@/lib/actions/prompts";
+import { useSession } from "@/lib/auth-client";
+
 
 // ─── Badge components ─────────────────────────────────────────────────────────
 
@@ -142,7 +144,7 @@ function DeleteConfirmModal({ isOpen, onClose, onConfirm, promptTitle, isDeletin
         <div className="text-center">
           <h3 className="text-base font-semibold text-white mb-1">Delete Prompt?</h3>
           <p className="text-sm text-zinc-400 leading-relaxed">
-            <span className="text-zinc-200 font-medium">"{promptTitle}"</span> will be permanently removed. This can't be undone.
+            <span className="text-zinc-200 font-medium">&quot;{promptTitle}&quot;</span> will be permanently removed. This can&apos;t be undone.
           </p>
         </div>
         <div className="flex gap-3 mt-1">
@@ -167,14 +169,14 @@ function DeleteConfirmModal({ isOpen, onClose, onConfirm, promptTitle, isDeletin
 
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
-function EmptyState({ hasSearch, query }) {
+function EmptyState({ hasSearch, query, href }) {
   if (hasSearch) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <div className="size-14 rounded-2xl bg-zinc-800/50 border border-white/5 flex items-center justify-center mb-4">
           <Magnifier className="size-6 text-zinc-500" aria-hidden="true" />
         </div>
-        <p className="text-white font-medium mb-1">No results for "{query}"</p>
+        <p className="text-white font-medium mb-1">No results for &quot;{query}&quot;</p>
         <p className="text-sm text-zinc-500">Try a different title, category, or AI tool.</p>
       </div>
     );
@@ -186,10 +188,10 @@ function EmptyState({ hasSearch, query }) {
       </div>
       <h3 className="text-lg font-semibold text-white mb-2">No prompts yet</h3>
       <p className="text-sm text-zinc-400 max-w-xs leading-relaxed mb-6">
-        You haven't published any prompts. Create your first one to start building your portfolio.
+        You haven&apos;t published any prompts. Create your first one to start building your portfolio.
       </p>
       <Link
-        href="/dashboard/creator/add-prompt"
+        href={href}
         className="inline-flex items-center gap-2 h-10 px-5 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-[0_4px_16px_rgba(37,99,235,0.3)]"
       >
         <Plus className="size-4" aria-hidden="true" />
@@ -233,6 +235,8 @@ export default function MyPrompts({ prompts = [] }) {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const { data: session } = useSession();
+
   const filteredPrompts = useMemo(() => {
     const q = searchQuery.toLowerCase();
     return prompts.filter(
@@ -242,6 +246,13 @@ export default function MyPrompts({ prompts = [] }) {
         p.aiTool.toLowerCase().includes(q)
     );
   }, [searchQuery, prompts]);
+
+
+
+  const href =
+    session?.user?.role === "creator"
+      ? "/dashboard/creator/add-prompt"
+      : "/dashboard/user/add-prompt";
 
   const totalPages = Math.max(1, Math.ceil(filteredPrompts.length / ITEMS_PER_PAGE));
 
@@ -273,7 +284,7 @@ export default function MyPrompts({ prompts = [] }) {
   if (!prompts.length) {
     return (
       <div className="w-full bg-[#0a0a0c]/60 border border-white/5 rounded-2xl">
-        <EmptyState hasSearch={false} />
+        <EmptyState hasSearch={false} href={href} />
       </div>
     );
   }
@@ -308,7 +319,7 @@ export default function MyPrompts({ prompts = [] }) {
 
           <div className="ml-auto">
             <Link
-              href="/dashboard/creator/add-prompt"
+              href={href}
               aria-label="Create new prompt"
               className="inline-flex items-center gap-2 h-10 px-4 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-[0_4px_12px_rgba(37,99,235,0.25)]"
             >
@@ -323,7 +334,7 @@ export default function MyPrompts({ prompts = [] }) {
         <div className="bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.5)] overflow-hidden">
 
           {filteredPrompts.length === 0 ? (
-            <EmptyState hasSearch query={searchQuery} />
+            <EmptyState hasSearch query={searchQuery} href={href} />
           ) : (
             <>
               {/* ── Desktop / Tablet table (≥640px) ──────────────────────── */}

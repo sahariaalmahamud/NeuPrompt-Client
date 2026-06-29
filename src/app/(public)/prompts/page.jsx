@@ -1,24 +1,23 @@
 import AllPrompts from "@/components/allprompts/AllPrompts";
 import { getAllPrompts } from "@/lib/api/prompts";
 
-
 export const metadata = {
   title: "Explore Prompts | NeuPrompt",
   description: "Discover high-quality AI prompts created by the community.",
 };
-;
 
-export default async function MarketplacePage() {
-  const data = await getAllPrompts();
+export default async function MarketplacePage({ searchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const initialSearch = typeof resolvedSearchParams?.search === "string"
+    ? resolvedSearchParams.search
+    : "";
+  const data = await getAllPrompts({ search: initialSearch });
 
   return (
     <div className="min-h-screen bg-[#030303] text-white font-sans relative overflow-hidden mt-8">
-      {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none z-0" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
-
-        {/* Header */}
         <div className="flex flex-col items-center justify-center text-center mb-12 space-y-4 pt-8">
           <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight text-white">
             Explore AI Prompts
@@ -35,13 +34,12 @@ export default async function MarketplacePage() {
           </div>
         </div>
 
-        {/* Pass all three props — AllPrompts seeds its state from these */}
         <AllPrompts
           allprompts={data.prompts}
           initialTotal={data.total}
           initialTotalPages={data.totalPages}
+          initialSearch={initialSearch}
         />
-
       </div>
     </div>
   );

@@ -8,14 +8,14 @@ import {
 } from "@gravity-ui/icons";
 import { Card } from "@heroui/react";
 
-export default function CreatorStats() {
-  // ----------------------------------------------------------------------
-  // CREATOR STATS DATA
-  // ----------------------------------------------------------------------
+export default function CreatorStats({ myStats }) {
+  
+  
+
   const stats = [
     {
       title: "Total Prompts",
-      value: "42",
+      value: myStats?.length || "0",
       icon: LayoutList,
       accent: "text-blue-400",
       bgAccent: "bg-blue-500/10",
@@ -23,7 +23,7 @@ export default function CreatorStats() {
     },
     {
       title: "Total Copies",
-      value: "1,284",
+      value: myStats?.copies || "0",
       icon: Copy,
       accent: "text-purple-400",
       bgAccent: "bg-purple-500/10",
@@ -31,7 +31,7 @@ export default function CreatorStats() {
     },
     {
       title: "Total Bookmarks",
-      value: "356",
+      value: myStats?.bookmarks || "0",
       icon: Bookmark,
       accent: "text-emerald-400",
       bgAccent: "bg-emerald-500/10",
@@ -39,7 +39,7 @@ export default function CreatorStats() {
     },
     {
       title: "Average Rating",
-      value: "4.8",
+      value: myStats?.averageRating || "4.8",
       icon: Star,
       accent: "text-amber-400",
       bgAccent: "bg-amber-500/10",

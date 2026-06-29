@@ -3,13 +3,21 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { CircleCheck, Envelope, ArrowRight, ShieldCheck } from '@gravity-ui/icons';
 import { createSubscription } from '@/lib/actions/subscriptions';
+import { getUserSession } from '@/lib/core/session';
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;
 
+  const session = await getUserSession();
+
   if (!session_id) {
     throw new Error('Please provide a valid session_id (`cs_test_...`)');
   }
+
+  const href =
+    session?.user?.role === "creator"
+      ? "/dashboard/creator"
+      : "/dashboard/user";
 
   const {
     status,
@@ -77,7 +85,7 @@ export default async function Success({ searchParams }) {
           {/* Contextual Action Redirect and Support Interface */}
           <div className="space-y-4">
             <Link
-              href="/prompts"
+              href={href}
               className="inline-flex w-full items-center justify-center gap-2 bg-white hover:bg-zinc-200 text-black font-bold py-3 px-4 rounded-xl transition-all shadow-md text-xs"
             >
               Go to Dashboard

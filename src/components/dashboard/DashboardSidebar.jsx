@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Avatar } from "@heroui/react";
 import {
-  Bell,
+  CirclePlus,
   Envelope,
   Gear,
   House,
@@ -44,14 +44,14 @@ export default function DashboardSidebar() {
   const creatorNavLinks = [
     { icon: House, href: "/dashboard/creator", label: "Home" },
     { icon: Person, href: "/dashboard/creator/my-profile", label: "My Profile" },
-    { icon: Bell, href: "/dashboard/creator/add-prompt", label: "Add Prompt" },
+    { icon: CirclePlus, href: "/dashboard/creator/add-prompt", label: "Add Prompt" },
     { icon: Envelope, href: "/dashboard/creator/my-prompts", label: "My Prompts" },
   ];
 
   const userNavLinks = [
     { icon: House, href: "/dashboard/user", label: "Home" },
     { icon: Person, href: "/dashboard/user/my-profile", label: "My Profile" },
-    { icon: Bell, href: "/dashboard/user/add-prompt", label: "Add Prompt" },
+    { icon: CirclePlus, href: "/dashboard/user/add-prompt", label: "Add Prompt" },
     { icon: Magnifier, href: "/dashboard/user/my-prompts", label: "My Prompts" },
     { icon: Bookmark, href: "/dashboard/user/saved-prompts", label: "Saved" },
     { icon: FileText, href: "/dashboard/user/my-reviews", label: "Reviews" },
@@ -112,7 +112,7 @@ export default function DashboardSidebar() {
               </span>
               <span className="w-px h-3 bg-white/10" />
               <span className="text-[10px] uppercase tracking-wider font-semibold text-blue-400">
-                {user?.plan}
+                {user?.plan || "FREE"}
               </span>
             </div>
           </div>
