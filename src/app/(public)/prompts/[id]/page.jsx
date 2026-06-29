@@ -10,7 +10,7 @@ export default async function PromptDetailsPage({ params }) {
   const reviews = await getReviews(id);
 
   return (
-    <div className="mt-8">
+    <div className="mt-16">
       <PromptDetails prompt={prompt} reviews={reviews}/>
     </div>
   );

@@ -15,15 +15,19 @@ import {
   Xmark,
   Gear,
   ArrowRightFromSquare,
-  Persons
+  Persons,
+  CrownDiamond
 } from "@gravity-ui/icons";
 import { useSession, signOut } from "@/lib/auth-client";
+import { BiBadgeCheck } from "react-icons/bi";
 
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session, isPending } = useSession();
   const user = session?.user;
+
+  console.log('user', user)
 
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -46,16 +50,27 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const navLinks = [
+  // ===========================
+  // CONDITIONAL NAVBAR LOGIC
+  // ===========================
+  // If the user has a "premium" plan, the Pricing link is excluded.
+  // Otherwise (free users or guests), the Pricing link is shown.
+  const visibleNavLinks = [
     { name: "Home", href: "/" },
     { name: "All Prompts", href: "/prompts" },
-    { name: "Pricing", href: "/plans" },
+    ...(user?.plan !== "premium" ? [{ name: "Pricing", href: "/plans" }] : []),
   ];
 
   const dashboardLinks = {
     'user': "/dashboard/user",
     'creator': "/dashboard/creator",
     'admin': "/dashboard/admin"
+  };
+
+  const profileLinks = {
+    user: "/dashboard/user/my-profile",
+    creator: "/dashboard/creator/my-profile",
+    admin: "/dashboard/admin/my-profile",
   };
 
   const handleSignOut = async () => {
@@ -69,13 +84,13 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 z-50 w-full flex justify-center transition-all duration-400 ease-in-out pointer-events-none ${isScrolled ? "pt-4 px-4 sm:px-6" : "pt-0 px-0"
+      className={`fixed top-0 z-50 w-full flex justify-center transition-all duration-400 ease-in-out pointer-events-none ${isScrolled ? "pt-4 px-4 sm:px-6" : "pt-0 pb-4 px-0"
         }`}
     >
       <nav
         className={`w-full pointer-events-auto transition-all duration-400 ease-in-out ${isScrolled
-          ? "max-w-7xl rounded-2xl border border-white/10 bg-[#030303]/85 backdrop-blur-2xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.8)]"
-          : "max-w-full rounded-none border-b border-white/5 bg-[#030303]/40 backdrop-blur-md"
+            ? "max-w-7xl rounded-2xl border border-white/10 bg-[#030303]/85 backdrop-blur-2xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.8)]"
+            : "max-w-full rounded-none border-b border-white/5 bg-[#030303]/40 backdrop-blur-md"
           }`}
       >
         <div className="max-w-7xl mx-auto w-full px-4 md:px-6 lg:px-8 flex items-center justify-between h-16 lg:h-20 transition-all">
@@ -94,8 +109,9 @@ export default function Navbar() {
           </Link>
 
           {/* CENTER: Desktop Navigation */}
-          <div className="hidden md:flex items-center h-full gap-6 lg:gap-8 flex-1">
-            {navLinks.map((link) => {
+          <div className="hidden md:flex items-center justify-center text-center h-full gap-6 lg:gap-8 flex-1">
+            {/* Dynamically mapping visibleNavLinks to apply Premium visibility logic */}
+            {visibleNavLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
@@ -114,20 +130,23 @@ export default function Navbar() {
           </div>
 
           {/* RIGHT: User Profile & Auth */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center justify-end gap-4 flex-1">
             {user ? (
               <Dropdown placement="bottom-end">
                 <Dropdown.Trigger>
                   <div role="button" tabIndex={0} className="rounded-full outline-none cursor-pointer">
                     <Avatar
-                      className="ring-2 ring-white/10 hover:ring-blue-500/60 transition-all duration-300"
-                      size="sm"
+                      className="w-10 h-10 ring-2 ring-white/10 hover:ring-blue-500/60 transition-all duration-300"
                     >
                       <Avatar.Image
-                        alt={user.name || "User Avatar"}
-                        src={user.image || "https://heroui-assets.nyc3.cdn.digitaloceanspaces.com/avatars/orange.jpg"}
+                        src={user.image}
+                        alt={user.name}
                       />
-                      <Avatar.Fallback delayMs={600} className="bg-zinc-800 text-white">
+
+                      <Avatar.Fallback
+                        delayMs={600}
+                        className="bg-zinc-800 text-white"
+                      >
                         {user.name?.charAt(0).toUpperCase() || "U"}
                       </Avatar.Fallback>
                     </Avatar>
@@ -155,6 +174,38 @@ export default function Navbar() {
                   </div>
 
                   <Dropdown.Menu className="p-2 flex flex-col gap-1">
+                    
+                    {/* ===========================
+                        AVATAR DROPDOWN LOGIC
+                    =========================== */}
+                    {/* 1. If user is FREE (or not premium): Show Upgrade Button */}
+                    {user?.plan !== "premium" ? (
+                      <Dropdown.Item
+                        key="upgrade"
+                        textValue="Upgrade to Premium"
+                        className="rounded-xl hover:bg-yellow-500/10 transition-colors"
+                        onClick={() => router.push("/plans")}
+                      >
+                        <div className="flex w-full items-center justify-between gap-2 py-1.5 px-1">
+                          <Label className="cursor-pointer text-yellow-400 font-medium">Upgrade to Premium</Label>
+                          <CrownDiamond className="size-4 text-yellow-400" />
+                        </div>
+                      </Dropdown.Item>
+                    ) : (
+                      /* 2. If user is PREMIUM: Show Read-Only Badge */
+                      <Dropdown.Item
+                        key="premium"
+                        textValue="Premium Member"
+                        isReadOnly
+                        className="rounded-xl cursor-default"
+                      >
+                        <div className="flex w-full items-center justify-between gap-2 py-1.5 px-1">
+                          <Label className="text-emerald-400 font-medium">Premium Member</Label>
+                          <BiBadgeCheck className="size-4 text-emerald-400" />
+                        </div>
+                      </Dropdown.Item>
+                    )}
+
                     <Dropdown.Item
                       key="dashboard"
                       textValue="Dashboard"
@@ -171,7 +222,7 @@ export default function Navbar() {
                       key="profile"
                       textValue="Profile"
                       className="rounded-xl hover:bg-white/5 transition-colors"
-                      onClick={() => router.push("/profile")}
+                      onClick={() => router.push(profileLinks[user.role] || "/dashboard/user/my-profile")}
                     >
                       <div className="flex w-full items-center justify-between gap-2 py-1.5 px-1">
                         <Label className="cursor-pointer text-zinc-300 font-medium">My Profile</Label>
@@ -179,7 +230,6 @@ export default function Navbar() {
                       </div>
                     </Dropdown.Item>
 
-                    {/* ✨ FIX: Removed the raw <div> and moved the line to the item's top border ✨ */}
                     <Dropdown.Item
                       key="logout"
                       textValue="Logout"
@@ -201,9 +251,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="bg-blue-600 text-white font-semibold tracking-wide hover:bg-blue-500 p-2 rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.2)]"
-                  size="sm"
-                  radius="full"
+                  className="bg-blue-600 text-white font-semibold tracking-wide hover:bg-blue-500 px-4 py-2 rounded-2xl shadow-[0_0_20px_rgba(37,99,235,0.2)]"
                 >
                   Sign Up
                 </Link>
@@ -224,7 +272,8 @@ export default function Navbar() {
         {/* MOBILE MENU */}
         {isOpen && (
           <div className="border-t border-white/10 md:hidden py-4 px-4 flex flex-col gap-2 bg-[#030303]/95 backdrop-blur-3xl rounded-b-2xl shadow-2xl">
-            {navLinks.map((link) => {
+            {/* Same conditional rendering logic applied to mobile navigation links */}
+            {visibleNavLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
@@ -241,6 +290,24 @@ export default function Navbar() {
 
             {user ? (
               <div className="mt-2 bg-white/5 rounded-xl overflow-hidden border border-white/5">
+                
+                {/* Mobile Dropdown Premium Implementation */}
+                {user?.plan !== "premium" ? (
+                  <Link
+                    href="/plans"
+                    className="px-4 py-4 text-sm font-medium text-yellow-400 hover:bg-white/5 hover:text-yellow-300 flex items-center justify-between border-b border-white/5 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <span>Upgrade to Premium</span>
+                    <CrownDiamond className="size-4" />
+                  </Link>
+                ) : (
+                  <div className="px-4 py-4 text-sm font-medium text-emerald-400 bg-emerald-500/5 flex items-center justify-between border-b border-white/5">
+                    <span>Premium Member</span>
+                    <BiBadgeCheck className="size-4" />
+                  </div>
+                )}
+
                 <Link
                   href={dashboardLinks[user.role || 'user']}
                   className="px-4 py-4 text-sm font-medium text-zinc-300 hover:bg-white/5 hover:text-white flex items-center justify-between border-b border-white/5 transition-colors"
@@ -250,7 +317,7 @@ export default function Navbar() {
                   <Gear className="size-4" />
                 </Link>
                 <Link
-                  href="/profile"
+                  href={profileLinks[user.role] || "/dashboard/user/my-profile"}
                   className="px-4 py-4 text-sm font-medium text-zinc-300 hover:bg-white/5 hover:text-white flex items-center justify-between border-b border-white/5 transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
