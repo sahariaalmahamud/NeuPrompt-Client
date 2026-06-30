@@ -29,8 +29,11 @@ export const deletePrompt = async (id) => {
 export async function approvePrompt(id) {
   const result = await serverMutation(`/api/admin/prompts/${id}/approve`, null, "PATCH");
 
-  revalidatePath(`/dashboard/admin/all-prompts/${id}`);
-  revalidatePath(`/prompts/${id}`);
+  // revalidatePath(`/dashboard/admin/all-prompts/${id}`);
+  // revalidatePath(`/prompts/${id}`);
+
+   revalidatePath("/dashboard/admin/all-prompts");
+  revalidatePath("/prompts");
 
   return result;
 }
@@ -39,8 +42,11 @@ export async function approvePrompt(id) {
 export async function rejectPrompt(id, rejectionNote) {
   const result = await serverMutation(`/api/admin/prompts/${id}/reject`, { rejectionNote }, "PATCH");
 
-  revalidatePath("/dashboard/admin/all-prompts");
-  revalidatePath("/prompts");
+  // revalidatePath("/dashboard/admin/all-prompts");
+  // revalidatePath("/prompts");
+
+  revalidatePath(`/dashboard/admin/all-prompts/${id}`);
+  revalidatePath(`/prompts/${id}`);
 
   return result;
 }

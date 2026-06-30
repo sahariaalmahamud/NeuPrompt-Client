@@ -14,6 +14,9 @@ async function getAuthHeaders() {
     });
 
     if (authToken?.token) {
+
+      console.log("JWT:", authToken.token);
+
       return {
         Authorization: `Bearer ${authToken.token}`,
       };
@@ -94,8 +97,8 @@ export async function serverMutation(path, data, method = "POST") {
 //handle: 400, 401, 403, 500 errors
 const handleErrorResponse = (response) => {
   if (response.status === 401) {
-    redirect('/auth/signin');
-  } else if (response.status === 403) {
     redirect('/unauthorized');
+  } else if (response.status === 403) {
+    redirect('/forbidden');
   }
 }

@@ -24,3 +24,23 @@ export async function getAdminAllPrompts() {
 export async function getFeaturedPrompts() {
   return serverFetch("/api/featured-prompts");
 }
+
+export async function getCreatorStats(creatorId) {
+  return serverFetch(`/api/dashboard/creator-stats/${creatorId}`);
+}
+
+export async function getPerformance(creatorId) {
+  return serverFetch(`/api/dashboard/performance/${creatorId}`
+  );
+}
+
+export async function getGrowth(creatorId) {
+  return serverFetch(`/api/dashboard/growth/${creatorId}`
+  );
+}
+
+
+export async function getTopPrompts(creatorId) {
+  return serverFetch(`/api/dashboard/top-prompts/${creatorId}`
+  );
+}

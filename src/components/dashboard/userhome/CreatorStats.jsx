@@ -8,14 +8,13 @@ import {
 } from "@gravity-ui/icons";
 import { Card } from "@heroui/react";
 
-export default function CreatorStats({ myStats }) {
-  
-  
 
-  const stats = [
+export default function CreatorStats({ stats }) {
+
+  const myStats = [
     {
       title: "Total Prompts",
-      value: myStats?.length || "0",
+      value: stats?.totalPrompts || "0",
       icon: LayoutList,
       accent: "text-blue-400",
       bgAccent: "bg-blue-500/10",
@@ -23,7 +22,7 @@ export default function CreatorStats({ myStats }) {
     },
     {
       title: "Total Copies",
-      value: myStats?.copies || "0",
+      value: stats?.totalCopies || "0",
       icon: Copy,
       accent: "text-purple-400",
       bgAccent: "bg-purple-500/10",
@@ -31,7 +30,7 @@ export default function CreatorStats({ myStats }) {
     },
     {
       title: "Total Bookmarks",
-      value: myStats?.bookmarks || "0",
+      value: stats?.totalBookmarks || "0",
       icon: Bookmark,
       accent: "text-emerald-400",
       bgAccent: "bg-emerald-500/10",
@@ -39,7 +38,7 @@ export default function CreatorStats({ myStats }) {
     },
     {
       title: "Average Rating",
-      value: myStats?.averageRating || "4.8",
+      value: stats?.averageRating || "0.0",
       icon: Star,
       accent: "text-amber-400",
       bgAccent: "bg-amber-500/10",
@@ -49,14 +48,14 @@ export default function CreatorStats({ myStats }) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((stat, index) => (
-        <Card 
-          key={index} 
+      {myStats.map((stat, index) => (
+        <Card
+          key={index}
           className="bg-[#0a0a0c]/80 backdrop-blur-xl border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden group rounded-2xl relative"
         >
           {/* Luminous Horizon Line (Expands on Hover) */}
-          <div 
-            className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent ${stat.glow} to-transparent group-hover:w-full transition-all duration-500 ease-out z-20`} 
+          <div
+            className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-transparent ${stat.glow} to-transparent group-hover:w-full transition-all duration-500 ease-out z-20`}
           />
 
           {/* Subtle Top-Right Ambient Glow */}
@@ -70,19 +69,13 @@ export default function CreatorStats({ myStats }) {
               <stat.icon width={18} height={18} />
             </div>
           </Card.Header>
-          
+
           <Card.Content className="px-6 pb-6 pt-0 flex flex-row items-end gap-2 bg-transparent relative z-10">
             <p className="text-3xl md:text-4xl font-bold text-white tracking-tight leading-none m-0">
               {stat.value}
             </p>
-            {/* Trend Indicator */}
-            {index !== 3 && (
-              <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded-md mb-0.5">
-                +12%
-              </span>
-            )}
           </Card.Content>
-          
+
         </Card>
       ))}
     </div>

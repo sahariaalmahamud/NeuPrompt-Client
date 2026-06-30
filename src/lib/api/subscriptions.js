@@ -8,3 +8,8 @@ export async function getSubscription(userId) {
 
   return serverFetch(`/api/subscriptions/${userId}`);
 }
+
+
+export async function getAllTransactions() {
+  return serverFetch("/api/admin/transactions");
+}

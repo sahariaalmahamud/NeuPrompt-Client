@@ -27,7 +27,7 @@ export default function Navbar() {
   const { data: session, isPending } = useSession();
   const user = session?.user;
 
-  console.log('user', user)
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);

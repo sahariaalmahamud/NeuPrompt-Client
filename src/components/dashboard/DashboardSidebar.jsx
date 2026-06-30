@@ -46,6 +46,7 @@ export default function DashboardSidebar() {
     { icon: Person, href: "/dashboard/creator/my-profile", label: "My Profile" },
     { icon: CirclePlus, href: "/dashboard/creator/add-prompt", label: "Add Prompt" },
     { icon: Envelope, href: "/dashboard/creator/my-prompts", label: "My Prompts" },
+    { icon: FileText, href: "/dashboard/creator/my-reviews", label: "Reviews" },
   ];
 
   const userNavLinks = [
